@@ -1,0 +1,22 @@
+Melanoma (MEL)
+
+Melanoma is a malignant skin cancer that develops from melanocytes. It is one of the most serious forms of skin cancer due to its potential to spread to other parts of the body.
+
+Typical characteristics:
+- Asymmetry
+- Irregular or poorly defined borders
+- Multiple colors or uneven pigmentation
+- Diameter larger than common moles
+- Evolution or change over time
+
+Clinical notes:
+Early detection greatly improves treatment outcomes. Melanoma may appear anywhere on the skin and can sometimes arise from existing moles.
+
+ABCDE Rule:
+A - Asymmetry
+B - Border irregularity
+C - Color variation
+D - Diameter greater than 6 mm
+E - Evolving appearance
+
+Prompt medical assessment is recommended when melanoma is suspected.

@@ -1,0 +1,116 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual Environments
+# =========================
+venv/
+.venv/
+env/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+
+# =========================
+# Jupyter Notebooks
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# PyCharm
+# =========================
+.idea/
+
+# =========================
+# Operating System Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Dataset Files
+# =========================
+data/
+datasets/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+
+# =========================
+# Machine Learning Models
+# =========================
+models/
+*.h5
+*.keras
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.joblib
+*.pkl
+
+# =========================
+# Embeddings & Vector Stores
+# =========================
+embeddings/
+qdrant_db/
+chroma_db/
+faiss_index/
+vector_store/
+
+# =========================
+# Build Artifacts
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Testing
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+
+# =========================
+# FastAPI Cache
+# =========================
+.cache/
+
+# =========================
+# Uploads
+# =========================
+uploads/
+results/
+outputs/
+
+# =========================
+# Node.js (if frontend added later)
+# =========================
+node_modules/
+.next/
