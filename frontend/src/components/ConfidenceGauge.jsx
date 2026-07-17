@@ -1,80 +1,187 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function ConfidenceGauge({ value = 0 }) {
-  const [animatedValue, setAnimatedValue] = useState(0);
+  const [progress, setProgress] = useState(0);
 
-  // Smooth animation
   useEffect(() => {
+    let frame;
     let start = 0;
-    const duration = 800;
-    const stepTime = 10;
-    const steps = duration / stepTime;
-    const increment = value / steps;
 
-    const interval = setInterval(() => {
-      start += increment;
-      if (start >= value) {
-        start = value;
-        clearInterval(interval);
+    const animate = () => {
+      start += (value - start) * 0.08;
+
+      if (Math.abs(start - value) < 0.3) {
+        setProgress(value);
+        return;
       }
-      setAnimatedValue(start);
-    }, stepTime);
 
-    return () => clearInterval(interval);
+      setProgress(start);
+      frame = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => cancelAnimationFrame(frame);
   }, [value]);
 
-  const radius = 70;
+  const radius = 90;
   const stroke = 12;
-  const normalizedRadius = radius - stroke * 0.5;
-  const circumference = normalizedRadius * 2 * Math.PI;
 
-  const strokeDashoffset =
-    circumference - (animatedValue / 100) * circumference;
+  const normalizedRadius = radius - stroke / 2;
+  const circumference = 2 * Math.PI * normalizedRadius;
 
-  // Color logic (medical-style risk gradient)
-  const getColor = (val) => {
-    if (val < 40) return "#ef4444"; // red
-    if (val < 70) return "#f59e0b"; // amber
-    return "#22c55e"; // green
-  };
+  const dashOffset =
+    circumference -
+    (progress / 100) * circumference;
+
+  const gauge = useMemo(() => {
+    if (progress >= 85)
+      return {
+        color: "#22c55e",
+        label: "Excellent",
+      };
+
+    if (progress >= 70)
+      return {
+        color: "#3b82f6",
+        label: "High",
+      };
+
+    if (progress >= 50)
+      return {
+        color: "#f59e0b",
+        label: "Moderate",
+      };
+
+    return {
+      color: "#ef4444",
+      label: "Low",
+    };
+  }, [progress]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <svg height={180} width={180} className="transform -rotate-90">
-        {/* background circle */}
-        <circle
-          stroke="#e5e7eb"
-          fill="transparent"
-          strokeWidth={stroke}
-          r={normalizedRadius}
-          cx={90}
-          cy={90}
-        />
+    <div className="flex flex-col items-center">
 
-        {/* progress circle */}
-        <circle
-          stroke={getColor(animatedValue)}
-          fill="transparent"
-          strokeWidth={stroke}
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          r={normalizedRadius}
-          cx={90}
-          cy={90}
-          style={{
-            transition: "stroke-dashoffset 0.3s linear",
-          }}
-        />
-      </svg>
+      <div className="relative h-[220px] w-[220px]">
 
-      {/* center text */}
-      <div className="absolute flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold text-slate-800">
-          {Math.round(animatedValue)}%
-        </span>
-        <span className="text-xs text-slate-500">Confidence</span>
+        <svg
+          className="-rotate-90"
+          width="220"
+          height="220"
+        >
+
+          {/* Background */}
+
+          <circle
+            cx="110"
+            cy="110"
+            r={normalizedRadius}
+            fill="none"
+            stroke="rgb(226 232 240)"
+            strokeWidth={stroke}
+          />
+
+          {/* Progress */}
+
+          <circle
+            cx="110"
+            cy="110"
+            r={normalizedRadius}
+            fill="none"
+            stroke={gauge.color}
+            strokeWidth={stroke}
+            strokeLinecap={progress >= 99.5 ? "butt" : "round"}
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            style={{
+              transition:
+                "stroke-dashoffset .8s ease, stroke .5s ease",
+            }}
+          />
+
+        </svg>
+
+        {/* Center */}
+
+        <div
+          className="
+          absolute
+          inset-0
+          flex
+          flex-col
+          items-center
+          justify-center
+          "
+        >
+
+          <span
+            className="
+            text-5xl
+            font-extrabold
+            text-slate-900
+            dark:text-white
+            "
+          >
+            {Math.round(progress)}%
+          </span>
+
+          <span
+            className="
+            mt-2
+            text-sm
+            text-slate-500
+            dark:text-slate-400
+            "
+          >
+            Confidence
+          </span>
+
+          <span
+            className="mt-4 rounded-full bg-slate-100 dark:bg-slate-800 px-4 py-1 text-sm font-semibold"
+            style={{
+              color: gauge.color,
+            }}
+          >
+            {gauge.label}
+          </span>
+
+        </div>
+
       </div>
+
+      {/* Bottom Progress */}
+
+      <div className="mt-8 w-full max-w-sm">
+
+        <div className="mb-2 flex justify-between text-sm">
+
+          <span className="text-slate-500">
+            AI Confidence
+          </span>
+
+          <span
+            className="font-semibold"
+            style={{ color: gauge.color }}
+          >
+            {Math.round(progress)}%
+          </span>
+
+        </div>
+
+        <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+
+          <div
+            className="h-full rounded-full transition-all duration-700"
+            style={{
+              width: `${progress}%`,
+              background: gauge.color,
+            }}
+          />
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
