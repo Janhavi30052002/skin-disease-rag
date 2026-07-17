@@ -1,58 +1,37 @@
-import { Moon, Sun } from "lucide-react";
-
+import { MoonStar, SunMedium } from "lucide-react";
 import useTheme from "@/hooks/useTheme";
 
 export default function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
 
-    const { theme, toggleTheme } = useTheme();
-
-    return (
-
-        <button
-
-            onClick={toggleTheme}
-
-            className="
-
-            w-11
-            h-11
-
-            rounded-xl
-
-            flex
-            items-center
-            justify-center
-
-            border
-
-            border-slate-300
-            dark:border-slate-700
-
-            bg-white
-            dark:bg-slate-900
-
-            hover:scale-105
-
-            transition-all
-            duration-300
-
-            shadow-sm
-            "
-
-        >
-
-            {
-
-                theme === "dark"
-
-                    ? <Sun size={20}/>
-
-                    : <Moon size={20}/>
-
-            }
-
-        </button>
-
-    );
-
+  return (
+    <button
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+      className="
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-xl
+      border
+      border-slate-300
+      dark:border-slate-700
+      bg-white
+      dark:bg-slate-900
+      shadow-sm
+      transition-all
+      duration-300
+      hover:scale-105
+      hover:shadow-md
+      "
+    >
+      {theme === "dark" ? (
+        <SunMedium size={20} />
+      ) : (
+        <MoonStar size={20} />
+      )}
+    </button>
+  );
 }

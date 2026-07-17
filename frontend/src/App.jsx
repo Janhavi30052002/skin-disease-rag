@@ -6,55 +6,44 @@ import ThemeContext from "./context/ThemeContext";
 import { DiagnosisProvider } from "./context/DiagnosisContext";
 
 function App() {
+  const getInitialTheme = () => {
+    const stored = localStorage.getItem("theme");
 
-    const getInitialTheme = () => {
+    if (stored) return stored;
 
-        const stored = localStorage.getItem("theme");
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
 
-        if (stored) return stored;
+  const [theme, setTheme] = useState(getInitialTheme);
 
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
-    };
+  useEffect(() => {
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
 
-    const [theme, setTheme] = useState(getInitialTheme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
-    useEffect(() => {
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
-        document.documentElement.classList.remove("light", "dark");
+  const value = useMemo(
+    () => ({
+      theme,
+      toggleTheme,
+    }),
+    [theme]
+  );
 
-        document.documentElement.classList.add(theme);
-
-        localStorage.setItem("theme", theme);
-
-    }, [theme]);
-
-    const toggleTheme = () => {
-
-        setTheme((prev) => prev === "light" ? "dark" : "light");
-
-    };
-
-    const value = useMemo(() => ({
-        theme,
-        toggleTheme,
-    }), [theme]);
-
-    return (
-
-        <ThemeContext.Provider value={value}>
-
-            <DiagnosisProvider>
-
-                <Dashboard />
-
-            </DiagnosisProvider>
-
-        </ThemeContext.Provider>
-
-    );
-
+  return (
+    <ThemeContext.Provider value={value}>
+      <DiagnosisProvider>
+        <Dashboard />
+      </DiagnosisProvider>
+    </ThemeContext.Provider>
+  );
 }
 
 export default App;
